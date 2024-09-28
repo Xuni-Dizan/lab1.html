@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Tài Khoản</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e9f1f7, #f1f9fc);
+            padding: 40px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: #2c2c2c;
+            color: #f1f1f1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #3b3b3b;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select {
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 12px;
+            font-size: 18px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #5bc0de;
+            box-shadow: 0 0 8px rgba(91, 192, 222, 0.3);
+        }
+
+        button {
+            background-color: #5bc0de;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            background-color: #31b0d5;
+            transform: scale(1.05);
+        }
+
+        .messages {
+            font-weight: bold;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .success-message {
+            color: #155724;
+        }
+
+        .error-message {
+            color: #721c24;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .guest-mode {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .dark-mode-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .language-select {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tạo Tài Khoản</h1>
+
+    <div class="container">
+        <div class="dark-mode-toggle">
+            <label for="theme-toggle">Chế Độ Tối:</label>
+            <input type="checkbox" id="theme-toggle">
+        </div>
+
+        <div class="language-select">
+            <label for="language">Chọn Ngôn Ngữ:</label>
+            <select id="language">
+                <option value="vi">Tiếng Việt</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <form id="user-form">
+            <div class="messages error-message" id="error-message">Vui lòng sửa các lỗi bên trên.</div>
+            <div class="messages success-message" id="success-message">Tài khoản đã được tạo thành công!</div>
+
+            <div class="card">
+                <div class="form-group tooltip">
+                    <label for="username">Tên Tài Khoản (bắt buộc)</label>
+                    <input type="text" id="username" name="username" placeholder="Nhập tên tài khoản" maxlength="255" required>
+                    <span class="tooltiptext">Nhập tên tài khoản duy nhất của bạn</span>
+                </div>
+
+                <div class="form-group tooltip">
+                    <label for="password">Mật Khẩu (bắt buộc)</label>
+                    <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" minlength="8" required>
+                    <button type="button" id="toggle-password">Hiện</button>
+                    <span class="tooltiptext">Tối thiểu 8 ký tự</span>
+                </div>
+
+                <div class="form-group tooltip">
+                    <label for="email">Địa Chỉ Email (bắt buộc)</label>
+                    <input type="email" id="email" name="email" placeholder="Nhập email (vd: user@example.com)" maxlength="255" required>
+                    <span class="tooltiptext">Nhập địa chỉ email hợp lệ</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="form-group tooltip">
+                    <label for="fullname">Họ và Tên (tùy chọn)</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="Nhập họ và tên" maxlength="255">
+                    <span class="tooltiptext">Họ và tên của bạn (nếu có)</span>
+                </div>
+
+                <div class="form-group tooltip">
+                    <label for="role">Vai Trò (bắt buộc)</label>
+                    <select id="role" name="role" required>
+                        <option value="">Chọn vai trò của bạn</option>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                        <option value="Moderator">Moderator</option>
+                    </select>
+                    <span class="tooltiptext">Chọn vai trò của bạn</span>
+                </div>
+
+                <div class="form-group tooltip">
+                    <label for="profile-pic">Ảnh Đại Diện</label>
+                    <input type="file" id="profile-pic" name="profile-pic">
+                    <span class="tooltiptext">Tải lên ảnh đại diện của bạn</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="account-created-at">Account Created At</label>
+                    <input type="text" id="account-created-at" name="account-created-at" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="last-updated-at">Last Updated At</label>
+                    <input type="text" id="last-updated-at" name="last-updated-at" readonly>
+                </div>
+            </div>
+
+            <button type="submit">Tạo Tài Khoản</button>
+            <button type="button" id="cancel-button">Hủy</button>
+        </form>
+
+        <div class="guest-mode">
+            <p>Hoặc <a href="guest-mode.html">tiếp tục như khách</a></p>
+        </div>
+    </div>
+
+    <script>
+        const userForm = document.getElementById('user-form');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        const themeToggle = document.getElementById('theme-toggle');
+        const languageSelect = document.getElementById('language');
+        const cancelButton = document.getElementById('cancel-button');
+
+        // Set current timestamp for account created at
+        const currentTimestamp = new Date().toLocaleString();
+        document.getElementById('account-created-at').value = currentTimestamp;
+        document.getElementById('last-updated-at').value = currentTimestamp; // Initialize last updated at
+
+        // Load saved theme and language preferences
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkMode = localStorage.getItem('dark-mode') === 'true';
+            themeToggle.checked = darkMode;
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+            }
+
+            const language = localStorage.getItem('language') || 'vi';
+            languageSelect.value = language;
+            updateLanguage(language);
+        });
+
+        themeToggle.addEventListener('change', function() {
+            const isChecked = this.checked;
+            document.body.classList.toggle('dark-mode', isChecked);
+            localStorage.setItem('dark-mode', isChecked);
+        });
+
+        languageSelect.addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            localStorage.setItem('language', selectedLanguage);
+            updateLanguage(selectedLanguage);
+        });
+
+        function updateLanguage(lang) {
+            const translations = {
+                vi: {
+                    title: "Tạo Tài Khoản",
+                    usernameLabel: "Tên Tài Khoản (bắt buộc)",
+                    passwordLabel: "Mật Khẩu (bắt buộc)",
+                    emailLabel: "Địa Chỉ Email (bắt buộc)",
+                    fullnameLabel: "Họ và Tên (tùy chọn)",
+                    roleLabel: "Vai Trò (bắt buộc)",
+                    submitButton: "Tạo Tài Khoản",
+                    cancelButton: "Hủy",
+                    successMessage: "Tài khoản đã được tạo thành công!",
+                    errorMessage: "Vui lòng sửa các lỗi bên trên.",
+                    tooltipUsername: "Nhập tên tài khoản duy nhất của bạn",
+                    tooltipPassword: "Tối thiểu 8 ký tự",
+                    tooltipEmail: "Nhập địa chỉ email hợp lệ",
+                    tooltipFullname: "Họ và tên của bạn (nếu có)",
+                    tooltipRole: "Chọn vai trò của bạn",
+                },
+                en: {
+                    title: "Create Account",
+                    usernameLabel: "Username (required)",
+                    passwordLabel: "Password (required)",
+                    emailLabel: "Email Address (required)",
+                    fullnameLabel: "Full Name (optional)",
+                    roleLabel: "Role (required)",
+                    submitButton: "Create Account",
+                    cancelButton: "Cancel",
+                    successMessage: "Account created successfully!",
+                    errorMessage: "Please fix the errors above.",
+                    tooltipUsername: "Enter your unique username",
+                    tooltipPassword: "Minimum 8 characters",
+                    tooltipEmail: "Enter a valid email address",
+                    tooltipFullname: "Your full name (if any)",
+                    tooltipRole: "Select your role",
+                }
+            };
+
+            const langData = translations[lang];
+            document.title = langData.title;
+            document.querySelector('h1').innerText = langData.title;
+            document.querySelector('label[for="username"]').innerText = langData.usernameLabel;
+            document.querySelector('label[for="password"]').innerText = langData.passwordLabel;
+            document.querySelector('label[for="email"]').innerText = langData.emailLabel;
+            document.querySelector('label[for="fullname"]').innerText = langData.fullnameLabel;
+            document.querySelector('label[for="role"]').innerText = langData.roleLabel;
+            document.querySelector('button[type="submit"]').innerText = langData.submitButton;
+            document.querySelector('#cancel-button').innerText = langData.cancelButton;
+            successMessage.innerText = langData.successMessage;
+            errorMessage.innerText = langData.errorMessage;
+
+            // Update tooltips
+            document.querySelectorAll('.tooltiptext')[0].innerText = langData.tooltipUsername;
+            document.querySelectorAll('.tooltiptext')[1].innerText = langData.tooltipPassword;
+            document.querySelectorAll('.tooltiptext')[2].innerText = langData.tooltipEmail;
+            document.querySelectorAll('.tooltiptext')[3].innerText = langData.tooltipFullname;
+            document.querySelectorAll('.tooltiptext')[4].innerText = langData.tooltipRole;
+        }
+
+        userForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let isValid = true;
+
+            // Validate form inputs
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+
+            if (username.trim() === '' || password.trim() === '' || email.trim() === '') {
+                isValid = false;
+                errorMessage.style.display = 'block';
+            }
+
+            if (isValid) {
+                // Handle successful account creation
+                document.getElementById('last-updated-at').value = new Date().toLocaleString(); // Update last updated at
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                userForm.reset();
+                document.getElementById('account-created-at').value = currentTimestamp; // Ensure account created remains the same
+                document.getElementById('last-updated-at').value = currentTimestamp; // Reset last updated at
+            }
+        });
+
+        const togglePasswordButton = document.getElementById('toggle-password');
+        togglePasswordButton.addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                togglePasswordButton.innerText = "Ẩn";
+            } else {
+                passwordInput.type = "password";
+                togglePasswordButton.innerText = "Hiện";
+            }
+        });
+
+        cancelButton.addEventListener('click', function() {
+            window.history.back();
+        });
+    </script>
+</body>
+</html>
